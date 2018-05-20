@@ -13,6 +13,8 @@ router.get('/author', (req, res, next) => {
     res.render('author');
 });
 
+//GET  questions
+
 
 // Autoload for routes using :quizId
 router.param('quizId', quizController.load);

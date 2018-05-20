@@ -138,6 +138,17 @@ exports.play = (req, res, next) => {
     });
 };
 
+exports.randomplay = (req, res, next) => {
+
+    const {quiz, query} = req;
+
+    const answer = query.answer || '';
+
+    res.render('quizzes/random_play', {
+        quiz,
+        answer
+    });
+};
 
 // GET /quizzes/:quizId/check
 exports.check = (req, res, next) => {
