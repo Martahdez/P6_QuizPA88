@@ -144,7 +144,7 @@ exports.randomplay = (req, res, next) => {
 
     const answer = query.answer || '';
 
-    res.render('quizzes/random_play', {
+    res.render('random_play', {
         quiz,
         answer
     });

@@ -14,8 +14,8 @@ router.get('/author', (req, res, next) => {
 });
 
 //GET  questions
-router.get('/quizzes/random_play', (req, res, next) => {
-    res.render('/quizzes/random_play');
+router.get('/random_play', (req, res, next) => {
+    res.render('random_play');
 });
 
 // Autoload for routes using :quizId
