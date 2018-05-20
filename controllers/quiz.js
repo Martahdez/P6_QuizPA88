@@ -140,13 +140,17 @@ exports.play = (req, res, next) => {
 
 exports.randomplay = (req, res, next) => {
 
+
+
     const {quiz, query} = req;
 
     const answer = query.answer || '';
+    const score = 1; //Esto lo tengo que cambiar por la puntuacion real
 
     res.render('random_play', {
         quiz,
-        answer
+        answer,
+        score
     });
 };
 
