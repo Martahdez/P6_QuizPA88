@@ -139,8 +139,11 @@ exports.play = (req, res, next) => {
 };
 
 exports.randomplay = (req, res, next) => {
-
-
+//Tengo que contestar preguntar al azar
+ //Mostrar numero de preguntas acertadas
+ //El numero de preguntas sera cero al empezar
+//debemos utilizar el almacen de sesin para guardar el estado del juego
+    //estado se puede guardar en req.session
 
     const {quiz, query} = req;
 
@@ -149,7 +152,7 @@ exports.randomplay = (req, res, next) => {
     score ++;
     //llamar metodo check
     //si esta bien incrementar si esta mal dejar de jugar
-    if(check(quiz,result,answer)==1){
+    if(randomcheck(quiz,result,answer)==1){
         const score=score+1;
         const{quiz, query} = req;
         randomplay(quiz,answer,score);
@@ -175,3 +178,17 @@ exports.check = (req, res, next) => {
         answer
     });
 };
+
+exports.randomcheck = ()=>{
+//Este metodo se utiliza para comprobar el otro
+
+    const {quiz, query} = req;
+
+    const answer = query.answer || "";
+    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
+
+    res.render('quizzes/result', { //para que pase a otra pag web
+        quiz,
+        answer
+    });
+}
