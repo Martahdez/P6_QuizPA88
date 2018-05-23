@@ -145,11 +145,18 @@ exports.randomplay = (req, res, next) => {
     const {quiz, query} = req;
 
     const answer = query.answer || '';
-    const score = 1; //Esto lo tengo que cambiar por la puntuacion real
+    const score=0;
+    score ++;
+    //llamar metodo check
+    //si esta bien incrementar si esta mal dejar de jugar
+    if(check(quiz,result,answer)==1){
+        const score=score+1;
+        const{quiz, query} = req;
+        randomplay(quiz,answer,score);
+    }
 
     res.render('random_play', {
         quiz,
-        answer,
         score
     });
 };
@@ -162,7 +169,7 @@ exports.check = (req, res, next) => {
     const answer = query.answer || "";
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
 
-    res.render('quizzes/result', {
+    res.render('quizzes/result', { //para que pase a otra pag web
         quiz,
         result,
         answer
