@@ -192,7 +192,7 @@ exports.randomcheck = (req,res,next)=>{
     let score = req.session.randomplay.length; //Devuelvo el numero de respuestas acertadas
     if(result===1){ //Si he acertado la respuesta
         req.session.randomplay.push(quiz); //La añado al array de respuestas acertadas
-        score = req.session.randomplay.length; //Actualizo la puntuacion
+        score = req.session.randomplay.length+1; //Actualizo la puntuacion
     } else { //Si fallamos hay que resetear el array de respuestas acertadas
         req.session.randomplay=[];
     }
