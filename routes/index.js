@@ -19,7 +19,7 @@ router.get('/author', (req, res, next) => {
 router.param('quizId', quizController.load);
 
 // Routes for the resource /quizzes
-router.get('/quizzes/randomcheck/:quizId(\\d+)/play',  quizController.randomcheck);
+router.get('/quizzes/randomcheck/:quizId(\\d+)/',  quizController.randomcheck);
 router.get('/quizzes/random_play',         quizController.randomplay);
 
 router.get('/quizzes',                     quizController.index);
