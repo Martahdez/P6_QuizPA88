@@ -151,11 +151,10 @@ exports.randomplay = (req, res, next) => {
     req.session.randomplay = req.session.randomplay || [];
     models.quiz.findAll()
         .then(quizzes => { ////Guardo todos los quizzes de mi base de datos
-            let quizzes_base = quizzes; //NO ESTOY SEGURA DE SI ESTO SE PUEDE HACER
-            return quizzes_base;//ESto no se si hay que hacerlo
+            req.session.quizzes = quizzes; //NO ESTOY SEGURA DE SI ESTO SE PUEDE HACER
         })
-        .then(quizzes_base => {
-            if (quizzes_base.length === req.session.randomplay.length) {
+        .then( () => {
+            if (req.session.quizzes.length === req.session.randomplay.length) {
                 const score = req.session.randomplay.length; //la puntuacion sera las preguntas acertadas
                 req.session.randomplay = []; //como hemos preguntado todas , reseteamos
                 res.render('quizzes/random_none', {
@@ -163,12 +162,11 @@ exports.randomplay = (req, res, next) => {
                 });
             }
             //si no es asi devolvemos una pregunta
-            let pos = Math.floor(Math.random() * quizzes.length); //Para acceder a una posicion random
-            quiz = quizzes_base[pos];
+            let pos = Math.floor(Math.random() * req.session.quizzes.length); //Para acceder a una posicion random
+            quiz = req.session.quizzes[pos];
             //Como esa es la pregunta que voy a hacer, la elimino
-            quizzes_base.splice(pos, 1);
+            req.session.quizzes.splice(pos, 1);
             return quiz;
-
         })
         .then(quiz => {
             //Finalmente devuelvo el quiz y la puntuacion actual
@@ -179,6 +177,7 @@ exports.randomplay = (req, res, next) => {
             })
         })
         .catch(error => next(error));
+
 
 
 };
@@ -192,7 +191,7 @@ exports.randomcheck = (req,res,next)=>{
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
     let score = req.session.randomplay.length; //Devuelvo el numero de respuestas acertadas
     if(result===1){ //Si he acertado la respuesta
-        req.session.randomplay.push(quiz.id); //La añado al array de respuestas acertadas
+        req.session.randomplay.push(quiz); //La añado al array de respuestas acertadas
         score = req.session.randomplay.length; //Actualizo la puntuacion
     } else { //Si fallamos hay que resetear el array de respuestas acertadas
         req.session.randomplay=[];
