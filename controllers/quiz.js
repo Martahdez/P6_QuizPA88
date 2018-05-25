@@ -151,7 +151,7 @@ exports.randomplay = (req, res, next) => {
     req.session.randomplay = req.session.randomplay || [];
     models.quiz.findAll()
         .then(quizzes => { ////Guardo todos los quizzes de mi base de datos
-            const quizzes_base = quizzes; //NO ESTOY SEGURA DE SI ESTO SE PUEDE HACER
+            let quizzes_base = quizzes; //NO ESTOY SEGURA DE SI ESTO SE PUEDE HACER
             return quizzes_base;//ESto no se si hay que hacerlo
         })
         .then(quizzes_base => {
