@@ -192,8 +192,8 @@ exports.randomcheck = (req,res,next)=>{
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
     let score = req.session.randomplay.length; //Devuelvo el numero de respuestas acertadas
     if(result===1){ //Si he acertado la respuesta
-        req.session.randomplay.push(quiz); //La añado al array de respuestas acertadas
-        score = req.session.randomplay.length; //Actualizo la puntuacion
+        req.session.randomplay.push(quiz.id); //La añado al array de respuestas acertadas
+         score = req.session.randomplay.length; //Actualizo la puntuacion
     } else { //Si fallamos hay que resetear el array de respuestas acertadas
         req.session.randomplay=[];
     }
