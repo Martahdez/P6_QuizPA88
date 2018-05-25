@@ -165,7 +165,7 @@ exports.randomplay = (req, res, next) => {
             let pos = Math.floor(Math.random() * req.session.quizzes.length); //Para acceder a una posicion random
             quiz = req.session.quizzes[pos];
             //Como esa es la pregunta que voy a hacer, la elimino
-            req.session.quizzes.splice(pos, 1);
+            req.session.quizzes.splice(req.session.quizzes[pos], 1);
             return quiz;
         })
         .then(quiz => {
@@ -188,9 +188,10 @@ exports.randomcheck = (req,res,next)=>{
     const {quiz, query} = req;
     const answer = query.answer || "";
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
-    const score = req.session.randomplay.length+result; //Devuelvo el numero de respuestas acertadas
+    const score = req.session.randomplay.length + result; //Devuelvo el numero de respuestas acertadas
     if(result===1){ //Si he acertado la respuesta
-        req.session.randomplay.push(quiz); //La añado al array de respuestas acertadas
+       // score++;
+        req.session.randomplay.push(quiz.id); //La añado al array de respuestas acertadas
     } else { //Si fallamos hay que resetear el array de respuestas acertadas
         req.session.randomplay=[];
     }
