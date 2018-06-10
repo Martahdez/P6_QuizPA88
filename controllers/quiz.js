@@ -148,39 +148,43 @@ exports.randomplay = (req, res, next) => {
 //7)La puntuacion sera el tamaño de las preguntas acertadas que te guardas
 
 //Lo primero que hago es recuperar los quizzes de la sesion o lo inicializamos a cero
-    req.session.randomplay = req.session.randomplay || [];
-    models.quiz.findAll()
-        .then(quizzes => { ////Guardo todos los quizzes de mi base de datos
-            req.session.quizzes = quizzes; //NO ESTOY SEGURA DE SI ESTO SE PUEDE HACER
-        })
-        .then( () => {
-            if (req.session.quizzes.length === req.session.randomplay.length) {
-                const score = req.session.randomplay.length; //la puntuacion sera las preguntas acertadas
-                req.session.randomplay = []; //como hemos preguntado todas , reseteamos
-                res.render('quizzes/random_none', {
+
+    exports.randomplay = (req, res, next) => {
+
+        req.session.randomPlay = req.session.randomPlay || []; //Si esta vacio lo ponemos
+        const op = Sequelize.Op;
+        //buscamos
+        const whereOp = {id: {[op.notIn]: req.session.randomPlay}};
+
+        models.quiz.count({where:whereOp})
+            .then(count => {
+                if(count===0){
+                    const score = req.session.randomPlay.length;
+                    req.session.randomPlay = [];
+                    res.render('quizzes/random_none',{
+                        score
+                    });
+                }
+                return models.quiz.findAll({
+                    where: whereOp,
+                    offset: Math.floor(count*Math.random()),
+                    limit: 1
+                })
+                    .then(quizzes => {
+                        return quizzes[0];
+                    });
+            })
+            .then(quiz =>{
+                const score = req.session.randomPlay.length;
+                res.render('quizzes/random_play',{
+                    quiz,
                     score
                 });
-            }
-            //si no es asi devolvemos una pregunta
-            let pos = Math.floor(Math.random() * req.session.quizzes.length); //Para acceder a una posicion random
-            quiz = req.session.quizzes[pos];
-            //Como esa es la pregunta que voy a hacer, la elimino
-            req.session.quizzes.splice(req.session.quizzes[pos], 1);
-            return quiz;
-        })
-        .then(quiz => {
-            //Finalmente devuelvo el quiz y la puntuacion actual
-            const score = req.session.randomplay.length;
-            res.render('quizzes/random_play', {
-                quiz,
-                score
             })
-        })
-        .catch(error => next(error));
-
-
-
-};
+            .catch(error => {
+                next(error);
+            });
+    };
 //Los pasos 3 y 4 los hago con el metodo randomcheck
 exports.randomcheck = (req,res,next)=>{
 //Este metodo se utiliza para comprobar el otro
