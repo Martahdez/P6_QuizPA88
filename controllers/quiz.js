@@ -164,9 +164,7 @@ exports.randomplay = (req, res, next) => {
                     //Reseteamos random play
                     req.session.randomPlay = [];
                     //Redenderizamos la vista
-                    res.render('quizzes/random_none',{
-                        score
-                    });
+                    res.render('quizzes/random_none',{score});
                 }
                 return models.quiz.findAll({
                     where: whereOp,
@@ -179,10 +177,7 @@ exports.randomplay = (req, res, next) => {
             })
             .then(quiz =>{
                 const score = req.session.randomPlay.length;
-                res.render('quizzes/random_play',{
-                    quiz,
-                    score
-                });
+                res.render('quizzes/random_play',{quiz, score});
             })
             .catch(error => {
                 next(error);
