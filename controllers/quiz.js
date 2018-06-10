@@ -190,7 +190,7 @@ exports.randomcheck = (req,res,next)=>{
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
     const score = req.session.randomplay.length + result; //Devuelvo el numero de respuestas acertadas
     if(result===1){ //Si he acertado la respuesta
-       // score++;
+        // score++;
         req.session.randomplay.push(quiz.id); //La añado al array de respuestas acertadas
     } else { //Si fallamos hay que resetear el array de respuestas acertadas
         req.session.randomplay=[];
