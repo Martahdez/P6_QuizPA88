@@ -153,14 +153,17 @@ exports.randomplay = (req, res, next) => {
 
         req.session.randomPlay = req.session.randomPlay || []; //Si esta vacio lo ponemos
         const op = Sequelize.Op;
-        //buscamos
+        //buscamos el id
         const whereOp = {id: {[op.notIn]: req.session.randomPlay}};
 
         models.quiz.count({where:whereOp})
             .then(count => {
+                //SI no hay quizzes
                 if(count===0){
                     const score = req.session.randomPlay.length;
+                    //Reseteamos random play
                     req.session.randomPlay = [];
+                    //Redenderizamos la vista
                     res.render('quizzes/random_none',{
                         score
                     });
